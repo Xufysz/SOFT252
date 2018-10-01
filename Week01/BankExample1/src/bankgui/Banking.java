@@ -38,7 +38,7 @@ public class Banking extends javax.swing.JFrame {
             }
         };
 
-        this.setCurrentAccount((BankAccount) bankAccounts.get(this.currentIndex));
+        this.setCurrentAccount(this.getCurrentAccount());
     }
 
     private void setCurrentAccount(BankAccount account) {
@@ -62,6 +62,10 @@ public class Banking extends javax.swing.JFrame {
             }
         }
         this.setCurrentAccount((BankAccount) bankAccounts.get(this.currentIndex));
+    }
+
+    private BankAccount getCurrentAccount() {
+        return (BankAccount) bankAccounts.get(this.currentIndex);
     }
 
     /**
@@ -161,6 +165,11 @@ public class Banking extends javax.swing.JFrame {
 
         btnWithdraw.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnWithdraw.setText("Withdraw");
+        btnWithdraw.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnWithdrawMouseClicked(evt);
+            }
+        });
 
         btnDeposit.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDeposit.setText("Deposit");
@@ -370,6 +379,17 @@ public class Banking extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.cycleAccounts(false);
     }//GEN-LAST:event_btnPreviousAccountMouseClicked
+
+    private void btnWithdrawMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnWithdrawMouseClicked
+        // TODO add your handling code here:
+        if (this.getCurrentAccount().WithdrawMoney(Integer.parseInt(this.txtAmount.getText()))) {
+            this.setCurrentAccount(this.getCurrentAccount());
+        } else {
+            JOptionPane.showMessageDialog(this, "Insufficient funds available\n"
+                    + "withdrawal not actioned", "Insufficient funds",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnWithdrawMouseClicked
 
     /**
      * @param args the command line arguments
