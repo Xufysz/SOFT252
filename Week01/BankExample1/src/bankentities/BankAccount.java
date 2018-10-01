@@ -20,6 +20,18 @@ public class BankAccount {
         this.overdraft = 500;
         this.holder = holder;
     }
+    
+    public String GetHolder(){
+        return this.holder;
+    }
+    
+    public int GetBalance(){
+        return this.balance;
+    }
+    
+    public int GetOverdraft(){
+        return this.overdraft;
+    }
 
     public void DepositMoney(int amount) {
         this.balance += amount;

@@ -5,6 +5,11 @@
  */
 package bankgui;
 
+import bankentities.BankAccount;
+import java.awt.List;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author krusby
@@ -14,8 +19,49 @@ public class Banking extends javax.swing.JFrame {
     /**
      * Creates new form Banking
      */
+    private ArrayList bankAccounts;
+    private int currentIndex;
+
     public Banking() {
         initComponents();
+        this.createDefaultAccounts();
+    }
+
+    private void createDefaultAccounts() {
+        this.currentIndex = 0;
+
+        this.bankAccounts = new ArrayList() {
+            {
+                add(new BankAccount("Kyle"));
+                add(new BankAccount("James"));
+                add(new BankAccount("Dom"));
+            }
+        };
+
+        this.setCurrentAccount((BankAccount) bankAccounts.get(this.currentIndex));
+    }
+
+    private void setCurrentAccount(BankAccount account) {
+        txtHolder.setText(account.GetHolder());
+        txtBalance.setText(Integer.toString(account.GetBalance()));
+        txtOverdraft.setText(Integer.toString(account.GetOverdraft()));
+    }
+
+    private void cycleAccounts(boolean next) {
+        if (next) {
+            if ((this.currentIndex + 1) < this.bankAccounts.size()) {
+                this.currentIndex++;
+            } else {
+                this.currentIndex = 0;
+            }
+        } else {
+            if ((this.currentIndex - 1) >= 0) {
+                this.currentIndex--;
+            } else {
+                this.currentIndex = this.bankAccounts.size() - 1;
+            }
+        }
+        this.setCurrentAccount((BankAccount) bankAccounts.get(this.currentIndex));
     }
 
     /**
@@ -228,10 +274,20 @@ public class Banking extends javax.swing.JFrame {
         btnPreviousAccount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnPreviousAccount.setText("Previous");
         btnPreviousAccount.setToolTipText("");
+        btnPreviousAccount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPreviousAccountMouseClicked(evt);
+            }
+        });
 
         btnNextAccount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnNextAccount.setText("Next");
         btnNextAccount.setToolTipText("");
+        btnNextAccount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNextAccountMouseClicked(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel9.setText("Name");
@@ -291,18 +347,29 @@ public class Banking extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(btnCreateAccount1))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCreateAccount1)
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(270, 270, 270)
                     .addComponent(jLabel9)
-                    .addContainerGap(270, Short.MAX_VALUE)))
+                    .addContainerGap(295, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnNextAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNextAccountMouseClicked
+        // TODO add your handling code here:
+        this.cycleAccounts(true);
+    }//GEN-LAST:event_btnNextAccountMouseClicked
+
+    private void btnPreviousAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPreviousAccountMouseClicked
+        // TODO add your handling code here:
+        this.cycleAccounts(false);
+    }//GEN-LAST:event_btnPreviousAccountMouseClicked
 
     /**
      * @param args the command line arguments
