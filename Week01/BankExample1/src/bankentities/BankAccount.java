@@ -20,6 +20,12 @@ public class BankAccount {
         this.overdraft = 500;
         this.holder = holder;
     }
+    
+    public BankAccount(String holder, Integer balance, Integer overdraft){
+        this.balance = balance;
+        this.overdraft = overdraft;
+        this.holder = holder;
+    }
 
     public String GetHolder() {
         return this.holder;
@@ -32,27 +38,51 @@ public class BankAccount {
     public int GetOverdraft() {
         return this.overdraft;
     }
-
-    public boolean DepositMoney(int amount) {
-        try {
-            this.balance += amount;
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+    
+    public TransactionOutput DepositMoney(String amount){
+        try{
+            return this.DepositMoney(Integer.parseInt(amount));
+        }
+        catch (NumberFormatException e){
+            return TransactionOutput.EXCEPTION;
         }
     }
 
-    public boolean WithdrawMoney(int amount) {
+    public TransactionOutput DepositMoney(int amount) {
+        try {
+            this.balance += amount;
+            return TransactionOutput.COMPLETED;
+        } catch (NumberFormatException e) {
+            return TransactionOutput.EXCEPTION;
+        }
+    }
+    
+    public TransactionOutput WithdrawMoney(String amount){
+        try{
+            return this.WithdrawMoney(Integer.parseInt(amount));
+        }
+        catch (NumberFormatException e){
+            return TransactionOutput.EXCEPTION;
+        }
+    }
+
+        public TransactionOutput WithdrawMoney(int amount) {
         try {
             if ((balance + overdraft) < amount) {
-                return false;
+                return TransactionOutput.INSUFFICIENT_FUNDS;
             } else {
                 balance -= amount;
-                return true;
+                return TransactionOutput.COMPLETED;
             }
         } catch (NumberFormatException e) {
-            return false;
+            return TransactionOutput.EXCEPTION;
         }
+    }
+    
+    public enum TransactionOutput{
+        COMPLETED,
+        INSUFFICIENT_FUNDS,
+        EXCEPTION,     
     }
 
 }

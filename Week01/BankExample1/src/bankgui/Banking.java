@@ -6,7 +6,7 @@
 package bankgui;
 
 import bankentities.BankAccount;
-import java.awt.List;
+import bankentities.BankAccount.TransactionOutput;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -39,6 +39,24 @@ public class Banking extends javax.swing.JFrame {
         };
 
         this.setCurrentAccount(this.getCurrentAccount());
+    }
+
+    private void createNewBankAccount(String holder, String balance, String overdraft) {
+        try {
+            int numBalance = Integer.parseInt(balance);
+            int numOverdraft = Integer.parseInt(overdraft);
+
+            BankAccount account = new BankAccount(holder, numBalance, numOverdraft);
+            this.bankAccounts.add(account);
+            JOptionPane.showMessageDialog(this, "Successfully created account",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Format " + e.getMessage() + " threw an exception",
+                    "Exception",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void setCurrentAccount(BankAccount account) {
@@ -100,7 +118,6 @@ public class Banking extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         btnPreviousAccount = new javax.swing.JButton();
         btnNextAccount = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
         btnCreateAccount1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -173,6 +190,11 @@ public class Banking extends javax.swing.JFrame {
 
         btnDeposit.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDeposit.setText("Deposit");
+        btnDeposit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDepositMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -216,6 +238,11 @@ public class Banking extends javax.swing.JFrame {
 
         btnCreateAccount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCreateAccount.setText("Create");
+        btnCreateAccount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCreateAccountMouseClicked(evt);
+            }
+        });
 
         txtCreateBalance.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -298,11 +325,13 @@ public class Banking extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel9.setText("Name");
-
         btnCreateAccount1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCreateAccount1.setText("Exit");
+        btnCreateAccount1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCreateAccount1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -334,11 +363,6 @@ public class Banking extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnCreateAccount1)))
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(144, 144, 144)
-                    .addComponent(jLabel9)
-                    .addContainerGap(144, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,11 +384,6 @@ public class Banking extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCreateAccount1)
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(270, 270, 270)
-                    .addComponent(jLabel9)
-                    .addContainerGap(295, Short.MAX_VALUE)))
         );
 
         pack();
@@ -382,14 +401,45 @@ public class Banking extends javax.swing.JFrame {
 
     private void btnWithdrawMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnWithdrawMouseClicked
         // TODO add your handling code here:
-        if (this.getCurrentAccount().WithdrawMoney(Integer.parseInt(this.txtAmount.getText()))) {
-            this.setCurrentAccount(this.getCurrentAccount());
-        } else {
-            JOptionPane.showMessageDialog(this, "Insufficient funds available\n"
-                    + "withdrawal not actioned", "Insufficient funds",
-                    JOptionPane.INFORMATION_MESSAGE);
+        TransactionOutput output = this.getCurrentAccount().WithdrawMoney(this.txtAmount.getText());
+        switch (output) {
+            case COMPLETED:
+                this.setCurrentAccount(this.getCurrentAccount());
+                break;
+            case INSUFFICIENT_FUNDS:
+                JOptionPane.showMessageDialog(this, "Insufficient funds available\n"
+                        + "withdrawal not actioned", "Insufficient funds",
+                        JOptionPane.INFORMATION_MESSAGE);
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "Format of amount threw an exception",
+                        "Exception",
+                        JOptionPane.ERROR_MESSAGE);
+                break;
         }
     }//GEN-LAST:event_btnWithdrawMouseClicked
+
+    private void btnDepositMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDepositMouseClicked
+        // TODO add your handling code here:
+        TransactionOutput output = this.getCurrentAccount().DepositMoney(this.txtAmount.getText());
+        if (output == TransactionOutput.COMPLETED) {
+            this.setCurrentAccount(this.getCurrentAccount());
+        } else {
+            JOptionPane.showMessageDialog(this, "Format of amount threw an exception",
+                    "Exception",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDepositMouseClicked
+
+    private void btnCreateAccount1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCreateAccount1MouseClicked
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_btnCreateAccount1MouseClicked
+
+    private void btnCreateAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCreateAccountMouseClicked
+        // TODO add your handling code here:
+        this.createNewBankAccount(this.txtCreateName.getText(), this.txtCreateBalance.getText(), this.txtCreateOverdraft.getText());
+    }//GEN-LAST:event_btnCreateAccountMouseClicked
 
     /**
      * @param args the command line arguments
@@ -441,7 +491,6 @@ public class Banking extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
