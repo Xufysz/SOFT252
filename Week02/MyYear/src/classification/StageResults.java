@@ -49,7 +49,7 @@ public class StageResults {
         if (overallAverage == 0)
             degree = "No marks!";
         else if(overallAverage < 40)
-            degree = "Fail!";
+            degree = "FAIL";
         else if (overallAverage < 50)
             degree = "3rd";
         else if (overallAverage < 60)
