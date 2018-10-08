@@ -1,6 +1,7 @@
 package classification;
 
 public class StageResults {
+
     private double totalMarks;
     private int totalCredits;
     private double stage2Average;
@@ -13,6 +14,52 @@ public class StageResults {
         totalMarks = 0.0;
         totalCredits = 0;
         stage2Average = 0.0;
+    }
+
+    /*
+     * Adds a new module mark to total credits and total marks
+     */
+    public void addModuleMark(int credits, double mark) {
+        this.totalCredits += credits;
+        this.totalMarks += mark * (credits / 10);
+    }
+
+    /*
+     * Calculates the current average of marks
+     */
+    public double calculateAverageSoFar() {
+        double average = totalMarks / (totalCredits / 10.0);
+        average = Math.round(average * 100) / 100.0;
+        return average;
+    }
+
+    /*
+     * Calculates a current prediction of class
+     */
+    public String predictClass() {
+        double overallAverage = calculateAverageSoFar();
+        if (stage2Average != 0)
+            overallAverage = Math.round(overallAverage * 0.7 * 100) / 100.0
+                    + Math.round(stage2Average * 0.3 * 100) / 100.0;
+        
+        if (totalCredits < MAXCREDITS)
+            return "Insufficient credits";
+            
+        String degree;
+        if (overallAverage == 0)
+            degree = "No marks!";
+        else if(overallAverage < 40)
+            degree = "Fail!";
+        else if (overallAverage < 50)
+            degree = "3rd";
+        else if (overallAverage < 60)
+            degree = "Lower 2nd";
+        else if (overallAverage < 70)
+            degree = "Upper 2nd";
+        else
+            degree = "1st";
+        
+        return degree;
     }
 
     /*
@@ -43,14 +90,14 @@ public class StageResults {
     public void setStage2Average(double stage2Average) {
         this.stage2Average = stage2Average;
     }
-    
+
     /*
      * Returns TRUE of 120 credits have been entered, FALSE otherwise.
      */
     public boolean isComplete() {
         return (totalCredits == MAXCREDITS);
     }
-    
+
     /*
      * Resets the instance variables to zero, destroying any existing
      * values.
@@ -60,6 +107,5 @@ public class StageResults {
         totalCredits = 0;
         stage2Average = 0.0;
     }
-    
-    
+
 }
