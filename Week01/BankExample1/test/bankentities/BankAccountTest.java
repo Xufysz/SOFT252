@@ -51,7 +51,6 @@ public class BankAccountTest {
         String expResult = "kyle";
         String result = instance.GetHolder();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
     }
 
     /**
@@ -64,7 +63,6 @@ public class BankAccountTest {
         int expResult = 100;
         int result = instance.GetBalance();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
     }
 
     /**
@@ -77,7 +75,6 @@ public class BankAccountTest {
         int expResult = 500;
         int result = instance.GetOverdraft();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
     }
 
     /**
@@ -91,7 +88,6 @@ public class BankAccountTest {
         BankAccount.TransactionOutput expResult = TransactionOutput.COMPLETED;
         BankAccount.TransactionOutput result = instance.DepositMoney(amount);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
     }
 
     /**
@@ -105,7 +101,6 @@ public class BankAccountTest {
         BankAccount.TransactionOutput expResult = TransactionOutput.COMPLETED;
         BankAccount.TransactionOutput result = instance.DepositMoney(amount);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
     }
 
     /**
@@ -119,7 +114,6 @@ public class BankAccountTest {
         BankAccount.TransactionOutput expResult = TransactionOutput.COMPLETED;
         BankAccount.TransactionOutput result = instance.WithdrawMoney(amount);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
     }
 
     /**
@@ -133,7 +127,6 @@ public class BankAccountTest {
         BankAccount.TransactionOutput expResult = TransactionOutput.COMPLETED;
         BankAccount.TransactionOutput result = instance.WithdrawMoney(amount);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
     }
 
 }
