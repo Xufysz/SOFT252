@@ -21,7 +21,7 @@ public class StockItem {
     }
 
     public void setName(String name) {
-        if (name != null && name.equals("")) {
+        if (name != null && !name.equals("")) {
             this.name = name;
         } else {
             throw new IllegalArgumentException("Name cannot be null or blank!");
