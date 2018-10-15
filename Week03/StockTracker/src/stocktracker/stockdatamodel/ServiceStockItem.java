@@ -18,4 +18,9 @@ public class ServiceStockItem extends StockItem {
         super.setName(name);
         super.setQuantityInStock(qty);
     }
+
+    @Override
+    public Boolean isInStock() {
+        return true;
+    }
 }
